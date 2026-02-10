@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autitude | Clínica Especializada</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700&family=JetBrains+Mono:wght@300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --silicone-white: rgba(255, 255, 255, 0.6);
+            --silicone-blue: rgba(162, 210, 255, 0.4);
+            --silicone-pink: rgba(255, 175, 204, 0.4);
+            --accent-mint: #b9fbc0;
+            --text-main: #2d3436;
+            --text-dim: #636e72;
+            --bg-gradient: radial-gradient(circle at top left, #fdfcfb 0%, #e2d1c3 100%);
+            --spring-easing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: #f0f4f8;
+            font-family: 'Lexend', sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Kinetic Background */
+        .scene {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            perspective: 2000px;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(185, 251, 192, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(162, 210, 255, 0.2) 0%, transparent 40%);
+        }
+
+        /* Silicone Buoyancy Elements */
+        .blob {
+            position: absolute;
+            background: var(--silicone-white);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.05),
+                inset 0 0 20px rgba(255,255,255,0.5);
+            animation: move 20s infinite alternate var(--spring-easing), morph 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes move {
+            from { transform: translate(0, 0) rotate(0deg) scale(1); }
+            to { transform: translate(100px, 50px) rotate(15deg) scale(1.1); }
+        }
+
+        @keyframes morph {
+            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            100% { border-radius: 60% 40% 30% 70% / 50% 60% 40% 60%; }
+        }
+
+        /* Isometric Grid Container */
+        .iso-container {
+            position: absolute;
+            right: -10%;
+            top: 15%;
+            transform: rotateX(55deg) rotateZ(-35deg);
+            transform-style: preserve-3d;
+            width: 600px;
+            height: 600px;
+        }
+
+        .iso-card {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            background: var(--silicone-blue);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            border: 1px solid rgba(255,255,255,0.4);
+            transform-style: preserve-3d;
+            transition: transform 0.6s var(--spring-easing), box-shadow 0.6s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: float 4s infinite ease-in-out;
+            box-shadow: 20px 20px 60px rgba(0,0,0,0.05);
+        }
+
+        .iso-card::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transform: translateZ(-40px);
+            border-radius: 48px;
+            filter: blur(15px);
+        }
+
+        .iso-card:hover {
+            transform: translateZ(50px) scale(1.05);
+            box-shadow: 40px 40px 80px rgba(0,0,0,0.1);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateZ(0px); }
+            50% { transform: translateZ(30px); }
+        }
+
+        /* Layout */
+        header {
+            padding: 40px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: -1px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-mark {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-mint);
+            border-radius: 12px;
+            transform: rotate(-10deg);
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.05);
+        }
+
+        .hero {
+            padding: 60px 80px;
+            max-width: 800px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .badge {
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            background: rgba(0,0,0,0.05);
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            line-height: 0.95;
+            margin-bottom: 32px;
+            font-weight: 700;
+            letter-spacing: -3px;
+        }
+
+        h1 span {
+            color: #74b9ff;
+            display: block;
+        }
+
+        .description {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin-bottom: 48px;
+            max-width: 500px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: var(--text-main);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s var(--spring-easing), box-shadow 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .btn-secondary {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        /* Floating Stats (Silicone kinetic) */
+        .stats-ring {
+            position: absolute;
+            bottom: 80px;
+            right: 80px;
+            display: flex;
+            gap: 24px;
+        }
+
+        .stat-card {
+            background: var(--silicone-white);
+            padding: 24px;
+            border-radius: 32px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.4);
+            min-width: 180px;
+            transition: all 0.4s var(--spring-easing);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            background: white;
+        }
+
+        .stat-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Custom Cursors/Glows */
+        .cursor-glow {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(185, 251, 192, 0.3) 0%, transparent 70%);
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        @media (max-width: 1024px) {
+            .iso-container {
+                display: none;
+            }
+            .hero {
+                padding: 40px;
+                text-align: center;
+            }
+            .cta-group {
+                justify-content: center;
+            }
+            header {
+                padding: 30px;
+            }
+            .stats-ring {
+                position: relative;
+                bottom: 0;
+                right: 0;
+                margin-top: 60px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-glow" id="glow"></div>
+
+    <div class="scene">
+        <div class="blob" style="width: 300px; height: 300px; top: -50px; left: -50px; background: var(--silicone-blue);"></div>
+        <div class="blob" style="width: 200px; height: 200px; bottom: 10%; right: 15%; background: var(--silicone-pink); animation-delay: -2s;"></div>
+        
+        <div class="iso-container">
+            <!-- 3D Isometric Playground -->
+            <div class="iso-card" style="top: 0; left: 0; background: var(--silicone-blue); animation-delay: 0s;">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="iso-card" style="top: 320px; left: -100px; background: var(--silicone-pink); animation-delay: -1s;">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            </div>
+            <div class="iso-card" style="top: 150px; left: 300px; background: var(--accent-mint); animation-delay: -2.5s;">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#2d3436" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5 5 0 010 7.07l-1.42 1.42a10 10 0 01-14.14 0l-1.42-1.42a5 5 0 017.07-7.07l1.42 1.42a10 10 0 0114.14 0z"/></svg>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <div class="logo-mark"></div>
+            Autitude
+        </div>
+        <nav style="font-family: 'JetBrains Mono'; font-size: 0.9rem;">
+            Equipe Especializada &bull; 2024
+        </nav>
+    </header>
+
+    <main class="hero">
+        <span class="badge">Neurodiversidade & Desenvolvimento</span>
+        <h1>Cuidado que <span>flutua com eles.</span></h1>
+        <p class="description">
+            Clínica especializada no atendimento ao público neurodivergente. Unimos ciência, afeto e uma equipe experiente para transformar trajetórias de desenvolvimento.
+        </p>
+
+        <div class="cta-group">
+            <a href="#" class="btn-primary">Agendar Avaliação</a>
+            <a href="#" class="btn-secondary">
+                <span>Conheça a clínica</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+        </div>
+    </main>
+
+    <aside class="stats-ring">
+        <div class="stat-card">
+            <span class="stat-val">+15</span>
+            <span class="stat-label">Especialistas</span>
+        </div>
+        <div class="stat-card" style="background: rgba(185, 251, 192, 0.4);">
+            <span class="stat-val">ABA</span>
+            <span class="stat-label">Metodologia</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-val">100%</span>
+            <span class="stat-label">Humanizado</span>
+        </div>
+    </aside>
+
+    <script>
+        const glow = document.getElementById('glow');
+        window.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+
+        // Kinetic response on hover
+        document.querySelectorAll('.iso-card, .stat-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                glow.style.width = '600px';
+                glow.style.height = '600px';
+            });
+            card.addEventListener('mouseleave', () => {
+                glow.style.width = '400px';
+                glow.style.height = '400px';
+            });
+        });
+    </script>
+</body>
+</html>
