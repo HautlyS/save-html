@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autitude | Celebrando a Neurodiversidade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        :root {
+            --lavender: #E6D5F5;
+            --pink: #FFD6E8;
+            --mint: #D4F4DD;
+            --peach: #FFDAB9;
+            --coral: #FFB7B2;
+            --blue: #B2CEFE;
+            --lilac: #D8B4FE;
+            --butter: #FFF9C4;
+            --text: #5D546F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: var(--lavender);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            cursor: default;
+        }
+
+        /* Gooey Filter Background */
+        .liquid-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: url('#goo');
+            background: var(--lavender);
+            transition: background 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .blob {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            filter: blur(10px);
+            opacity: 0.6;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(10vw, 20vh) scale(1.2); }
+            66% { transform: translate(-5vw, 15vh) scale(0.8); }
+            100% { transform: translate(5vw, -10vh) scale(1.1); }
+        }
+
+        /* Section Architecture */
+        .viewport {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
+        }
+
+        section.active {
+            opacity: 1;
+            pointer-events: all;
+            visibility: visible;
+        }
+
+        /* Typography & UI Elements */
+        h1 {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 600;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        p {
+            font-size: clamp(1.1rem, 2vw, 1.8rem);
+            max-width: 700px;
+            line-height: 1.4;
+            opacity: 0.8;
+        }
+
+        .cta-button {
+            margin-top: 3rem;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            background: white;
+            border: none;
+            border-radius: 100px;
+            color: var(--text);
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        }
+
+        .cta-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Navigation Dots */
+        .nav-dots {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .dot.active {
+            background: var(--text);
+            transform: scale(1.5);
+        }
+
+        /* Specific Visual Elements */
+        .card-container {
+            display: flex;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .bubble-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 40px;
+            width: 250px;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.03);
+            animation: breathe 4s infinite ease-in-out;
+        }
+
+        .bubble-card:nth-child(2) { animation-delay: 1s; }
+        .bubble-card:nth-child(3) { animation-delay: 2s; }
+
+        @keyframes breathe {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.02); }
+        }
+
+        .icon-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        /* SVG Morph Effect Layer */
+        .morph-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        #morph-path {
+            fill: white;
+        }
+
+        .fondant-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.15;
+            mix-blend-mode: overlay;
+            background: radial-gradient(circle at 50% 50%, #fff 0%, transparent 100%);
+        }
+
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body>
+
+    <svg style="display: none;">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -12" result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+            </filter>
+        </defs>
+    </svg>
+
+    <div class="fondant-texture"></div>
+
+    <div class="liquid-container" id="bg-liquid">
+        <div class="blob" style="width: 400px; height: 400px; top: -10%; left: -5%; background: var(--pink);"></div>
+        <div class="blob" style="width: 500px; height: 500px; bottom: -15%; right: -5%; background: var(--mint);"></div>
+        <div class="blob" style="width: 300px; height: 300px; top: 40%; left: 60%; background: var(--peach);"></div>
+    </div>
+
+    <div class="nav-dots" id="nav-dots">
+        <div class="dot active" data-index="0"></div>
+        <div class="dot" data-index="1"></div>
+        <div class="dot" data-index="2"></div>
+        <div class="dot" data-index="3"></div>
+    </div>
+
+    <main class="viewport">
+        <!-- Section 1: Hero -->
+        <section class="active" id="section-0">
+            <h1 class="reveal">Autitude</h1>
+            <p class="reveal">Onde cada mente encontra seu próprio ritmo e floresce com doçura.</p>
+            <button class="cta-button reveal" onclick="goToSection(1)">Começar Jornada</button>
+        </section>
+
+        <!-- Section 2: Vision -->
+        <section id="section-1">
+            <h1 class="reveal">Neurodiversidade</h1>
+            <p class="reveal">Não somos apenas uma clínica; somos um jardim de possibilidades onde a diferença é celebrada como nossa maior força.</p>
+            <div class="card-container reveal">
+                <div class="bubble-card" style="background: var(--pink);">
+                    <div class="icon-box" style="background: white;">💖</div>
+                    <strong>Acolhimento</strong>
+                </div>
+                <div class="bubble-card" style="background: var(--mint);">
+                    <div class="icon-box" style="background: white;">🎨</div>
+                    <strong>Expressão</strong>
+                </div>
+                <div class="bubble-card" style="background: var(--peach);">
+                    <div class="icon-box" style="background: white;">✨</div>
+                    <strong>Brilho Único</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Services -->
+        <section id="section-2">
+            <h1 class="reveal">Cuidado Suave</h1>
+            <p class="reveal">Abordagens terapêuticas modernas desenhadas com empatia e afeto para crianças e jovens autistas.</p>
+            <div class="card-container reveal">
+                <div class="bubble-card" style="border: 4px solid var(--lilac); background: transparent;">
+                    <h3>Terapias</h3>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">Lúdicas e Integrativas</p>
+                </div>
+                <div class="bubble-card" style="border: 4px solid var(--blue); background: transparent;">
+                    <h3>Suporte</h3>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">Acolhimento Familiar</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Contact -->
+        <section id="section-3">
+            <h1 class="reveal">Vamos conversar?</h1>
+            <p class="reveal">Estamos prontos para ouvir sua história e caminhar ao seu lado.</p>
+            <div class="reveal" style="margin-top: 2rem;">
+                <button class="cta-button" style="background: var(--lilac); color: white;">Agendar Visita</button>
+                <p style="margin-top: 2rem; font-size: 1rem;">São Paulo • Unidade Pinheiros</p>
+            </div>
+        </section>
+    </main>
+
+    <svg class="morph-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path id="morph-path" d="M 0 100 V 100 Q 50 100 100 100 V 100 z" />
+    </svg>
+
+    <script>
+        let currentSection = 0;
+        const totalSections = 4;
+        const sections = document.querySelectorAll('section');
+        const dots = document.querySelectorAll('.dot');
+        const bgLiquid = document.getElementById('bg-liquid');
+        const morphPath = document.getElementById('morph-path');
+        const bgColors = ['#E6D5F5', '#FFD6E8', '#D4F4DD', '#FFDAB9'];
+        
+        let isAnimating = false;
+
+        function goToSection(index) {
+            if (isAnimating || index === currentSection) return;
+            if (index < 0 || index >= totalSections) return;
+
+            isAnimating = true;
+            const nextSection = sections[index];
+            const currentSectionEl = sections[currentSection];
+
+            // Update Dots
+            dots.forEach(d => d.classList.remove('active'));
+            dots[index].classList.add('active');
+
+            // Start Morph Transition
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    isAnimating = false;
+                    currentSection = index;
+                }
+            });
+
+            // Fondant Melt Up Animation
+            tl.to(morphPath, {
+                duration: 0.8,
+                attr: { d: "M 0 100 V 50 Q 50 0 100 50 V 100 z" },
+                ease: "power2.in"
+            })
+            .to(morphPath, {
+                duration: 0.4,
+                attr: { d: "M 0 100 V 0 Q 50 0 100 0 V 100 z" },
+                ease: "power2.out",
+                onStart: () => {
+                    // Switch content visibility mid-morph
+                    currentSectionEl.classList.remove('active');
+                    nextSection.classList.add('active');
+                    bgLiquid.style.background = bgColors[index];
+                    
+                    // Reveal Animations
+                    gsap.fromTo(nextSection.querySelectorAll('.reveal'), 
+                        { y: 50, opacity: 0, scale: 0.9 },
+                        { y: 0, opacity: 1, scale: 1, duration: 1, stagger: 0.1, ease: "elastic.out(1, 0.75)" }
+                    );
+                }
+            })
+            .to(morphPath, {
+                duration: 0.8,
+                attr: { d: "M 0 0 V 0 Q 50 0 100 0 V 0 z" },
+                ease: "power2.inOut"
+            })
+            .set(morphPath, { attr: { d: "M 0 100 V 100 Q 50 100 100 100 V 100 z" } });
+        }
+
+        // Handle Scroll/Wheel
+        window.addEventListener('wheel', (e) => {
+            if (e.deltaY > 50) goToSection(currentSection + 1);
+            else if (e.deltaY < -50) goToSection(currentSection - 1);
+        });
+
+        // Handle Touch
+        let touchStartY = 0;
+        window.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY);
+        window.addEventListener('touchend', e => {
+            const touchEndY = e.changedTouches[0].clientY;
+            if (touchStartY - touchEndY > 50) goToSection(currentSection + 1);
+            else if (touchEndY - touchStartY > 50) goToSection(currentSection - 1);
+        });
+
+        // Click on dots
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                goToSection(parseInt(dot.getAttribute('data-index')));
+            });
+        });
+
+        // Initial Reveal
+        window.addEventListener('DOMContentLoaded', () => {
+            gsap.fromTo('#section-0 .reveal', 
+                { y: 50, opacity: 0, scale: 0.9 },
+                { y: 0, opacity: 1, scale: 1, duration: 1.5, stagger: 0.2, ease: "elastic.out(1, 0.75)" }
+            );
+        });
+
+        // Randomly pulse blobs
+        function pulseBlobs() {
+            const blobs = document.querySelectorAll('.blob');
+            blobs.forEach(blob => {
+                gsap.to(blob, {
+                    x: () => (Math.random() - 0.5) * 100,
+                    y: () => (Math.random() - 0.5) * 100,
+                    duration: 5 + Math.random() * 5,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+            });
+        }
+        pulseBlobs();
+    </script>
+</body>
+</html>
